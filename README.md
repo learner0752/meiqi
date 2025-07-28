@@ -53,15 +53,22 @@ sudo nano /etc/docker/daemon.json
     "https://你的加速器ID.mirror.aliyuncs.com"
   ]
 }
+```
+我的是这个：https://3u4cujqbh06um7.xuanyuan.run
+<img width="2176" height="414" alt="image" src="https://github.com/user-attachments/assets/e214232a-320b-417f-ad5f-e4d7795b2554" />
+保存并退出（按Ctrl+O->回车->Ctrl+X）
+#重启Docker服务
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl restart docker
+```
+#验证是否生效
+```bash
+docker info
+```
+输出中能看到
+```nginx
+Registry Mirrors：
 
 ```
-<img width="2176" height="414" alt="image" src="https://github.com/user-attachments/assets/e214232a-320b-417f-ad5f-e4d7795b2554" />
 
-## 示例代码
-
-```c
-#include <stdio.h>
-int main() {
-    printf("Hello GitHub Markdown!\n");
-    return 0;
-}
