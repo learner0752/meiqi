@@ -69,6 +69,15 @@ docker info
 输出中能看到
 ```nginx
 Registry Mirrors：
-
+  https://3u4cujqbh06um7.xuanyuan.run/
 ```
-
+3.__部署bifromq__
+#从轩辕镜像源拉取bifromq镜像
+```bash
+docker pull docker.xuanyuan.run/bifromq/bifromq:latest
+```
+登录轩辕账号和密码（充值50G/5元），实测使用登录的要快一些，不要用免登录拉取。
+#查看有无拉取成功
+```bash
+docker images
+```
