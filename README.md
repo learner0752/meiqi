@@ -1,4 +1,4 @@
-# 部署Bifromq
+### 部署Bifromq
 
 使用阿里云4核8G，40SSD的服务器搭建MQTT-broker，能支持10万tls连接并支持数据持久化(qos1/2)
 
@@ -72,12 +72,28 @@ Registry Mirrors：
   https://3u4cujqbh06um7.xuanyuan.run/
 ```
 3.__部署bifromq__
-#从轩辕镜像源拉取bifromq镜像
+# 从轩辕镜像源拉取bifromq镜像
 ```bash
 docker pull docker.xuanyuan.run/bifromq/bifromq:latest
 ```
 登录轩辕账号和密码（充值50G/5元），实测使用登录的要快一些，不要用免登录拉取。
-#查看有无拉取成功
+
+# 查看有无拉取成功
 ```bash
 docker images
 ```
+
+# 启动和配置bifromq参数
+```bash
+docker run -d \
+  --name bifromq \
+  -p 1883:1883 \
+  -p 1884:1884 \
+  -m 10G \
+  -e JVM_HEAP_OPTS='-Xms4G -Xmx4G -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxDirectMemorySize=4G' \
+  bifromq/bifromq:latest
+```
+1884是tls连接，1883是tcp连接。记得安全组开放入方向端口。
+可以使用MQTT客户端连接服务器，验证是否开启。
+
+# 
