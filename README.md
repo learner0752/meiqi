@@ -98,9 +98,25 @@ docker run -d \
 
 3.__Bifromq配置__
 ### tls连接（MQTTS加密连接）
-先准备证书。
-在https://www.duckdns.org/绑定域名。
-<img width="865" height="528" alt="image" src="https://github.com/user-attachments/assets/2e7878c6-14c5-4609-8f06-6a25bf089c19" />
+__先准备证书。__
+https://www.duckdns.org/
+绑定域名。
+<img width="491" height="300" alt="image" src="https://github.com/user-attachments/assets/2e7878c6-14c5-4609-8f06-6a25bf089c19" />
+__Let's Encrypt证书申请__
+安装Certbot工具
+```bash
+sudo apt update
+sudo apt install certbot
+```
+申请证书（DNS验证方式）
+```bash
+sudo certbot certonly --manual --preferred-challenges dns -d 申请的域名
+```
+执行后会提示添加DNS TXT记录。
+使用DuckDNS提供的Web API添加TXT
+```http
+https://www.duckdns.org/update?domains=coalgas&token=你的Token&txt=YALnAhsTiaAbLRajbwJpo-MZn8d9IYpsEvyBHbIPMHw&verbose=true
+```
 
 
 
