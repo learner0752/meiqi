@@ -120,7 +120,10 @@ sudo certbot certonly --manual --preferred-challenges dns -d 申请的域名
 https://www.duckdns.org/update?domains=你的域名&token=你的Token&txt=命令行指示的txt值&verbose=true
 ```
 执行完成后会生成证书。
+
 <img width="864" height="136" alt="image" src="https://github.com/user-attachments/assets/322641f4-9d04-4ea5-82b0-1a4156c1511c" />
+
+__配置bifromq__
 
 
 
