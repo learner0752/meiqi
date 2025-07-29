@@ -101,7 +101,9 @@ docker run -d \
 __先绑定域名__
 https://www.duckdns.org/
 绑定域名。
+
 <img width="491" height="300" alt="image" src="https://github.com/user-attachments/assets/2e7878c6-14c5-4609-8f06-6a25bf089c19" />
+
 __Let's Encrypt证书申请__
 安装Certbot工具
 ```bash
