@@ -4,7 +4,7 @@
 
 ## 部署步骤
 
-1.__安装docker__
+## 1.__安装docker__
 ### 更新现有的软件包
 ```bash
 sudo apt update
@@ -40,7 +40,7 @@ sudo systemctl status docker
 ```bash
 sudo docker run hello-world
 ```
-2.__配置镜像加速源-轩辕镜像__
+## 2.__配置镜像加速源-轩辕镜像__
 ### 创建和编辑配置文件/etc/docker/daemon.json
 ```bash
 sudo mkdir -p /etc/docker
@@ -96,8 +96,8 @@ docker run -d \
 1884是tls连接，1883是tcp连接。记得安全组开放入方向端口。
 可以使用MQTT客户端连接服务器，验证是否开启。
 
-3.__Bifromq配置__
-### tls连接（MQTTS加密连接）
+## 3.__Bifromq配置__
+### (1).tls连接（MQTTS加密连接）
 __先绑定域名__
 https://www.duckdns.org/
 绑定域名。
@@ -105,6 +105,7 @@ https://www.duckdns.org/
 <img width="491" height="300" alt="image" src="https://github.com/user-attachments/assets/2e7878c6-14c5-4609-8f06-6a25bf089c19" />
 
 __Let's Encrypt证书申请__
+
 安装Certbot工具
 ```bash
 sudo apt update
