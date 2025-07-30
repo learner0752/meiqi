@@ -71,7 +71,7 @@ docker info
 Registry Mirrors：
   https://3u4cujqbh06um7.xuanyuan.run/
 ```
-3.__部署bifromq__
+## 3.__部署bifromq__
 ### 从轩辕镜像源拉取bifromq镜像
 ```bash
 docker pull docker.xuanyuan.run/bifromq/bifromq:latest
@@ -96,7 +96,7 @@ docker run -d \
 1884是tls连接，1883是tcp连接。记得安全组开放入方向端口。
 可以使用MQTT客户端连接服务器，验证是否开启。
 
-## 3.__Bifromq配置__
+## 4.__Bifromq配置__
 ### (1).tls连接（MQTTS加密连接）
 __先绑定域名__
 https://www.duckdns.org/
