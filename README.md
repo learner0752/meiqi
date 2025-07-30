@@ -125,6 +125,7 @@ https://www.duckdns.org/update?domains=你的域名&token=你的Token&txt=命令
 <img width="678" height="103" alt="image" src="https://github.com/user-attachments/assets/d34d61e2-ec73-4b9f-a6f2-ebeb83be3ed2" />
 
 __Bifromq tls启动配置__
+
 创建目录结构
 ```bash
 mkdir -p root/cert /root/config/
