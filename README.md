@@ -123,8 +123,94 @@ https://www.duckdns.org/update?domains=你的域名&token=你的Token&txt=命令
 
 <img width="678" height="103" alt="image" src="https://github.com/user-attachments/assets/d34d61e2-ec73-4b9f-a6f2-ebeb83be3ed2" />
 
-__配置bifromq__
+__Bifromq tls启动配置__
+创建目录结构
+```bash
+mkdir -p root/cert /root/config/
+```
+复制Let’s Encrypt 证书到根目录
+```bash
+cp /etc/letsencrypt/live/coalgas1.duckdns.org/fullchain.pem ~/cert/server.crt
+cp /etc/letsencrypt/live/coalgas1.duckdns.org/privkey.pem ~/cert/server.key
+```
 
+修改证书属主权限（确保docker可读）
+```bash
+docker ps #查看所以运行的容器
+docker inspect --format '{{ .State.Pid }}' <containerID> | xargs ps -o user= #查看容器进程的UID，一般是1000
+sudo chown 1000:1000 server.crt server.key #更改文件拥有者为容器进程，即容器拥有访问权
+sudo chmod 600 server.crt server.key       #更改权限为仅容器可访问
+```
+
+编辑bifromq配置文件
+```bash
+mkdir -p conf #在当前目录创建conf
+docker cp <容器名>:/home/bifromq/conf/standalone.yml conf/  #将容器内的standalone.yml复制出来放到刚创建的文件中
+nano /conf/standalone.yml  #打开文件进行编辑
+```
+__将tls监听器添加进文件__
+```
+  tlsListener:
+    port: 1884
+    enable: true
+    sslConfig: 
+                certFile: "/cert/server.crt"   
+                keyFile:  "/cert/server.key" 
+```
+保存并退出（按Ctrl+O->回车->Ctrl+X）
+在当前目录下创建docker.compose.yml加载文件和持久化数据文件
+```bash
+mkdir -p ./data
+nano docker.compose.yml #创建并编辑文件
+```
+
+将配置信息复制进去，保存并退出（按Ctrl+O->回车->Ctrl+X）
+```
+services:
+  bifromq:
+    image: bifromq/bifromq:latest         # 使用最新的 BifroMQ 镜像
+    container_name: bifromq               # 指定容器名称为 bifromq
+
+    ports:
+      - "1883:1883"                       # 映射 MQTT 端口（未加密）
+      - "1884:1884"                       # 映射 MQTTS 端口（加密）
+
+    volumes:
+      - ./config/standalone.yml:/home/bifromq/conf/standalone.yml  # 挂载配置文件
+      - ./cert/server.crt:/cert/server.crt                         # 挂载服务器证书
+      - ./cert/server.key:/cert/server.key                         # 挂载服务器私钥
+      - ./data:/data                                               # 持久化数据存储目录（如日志或持久化消息）
+
+    environment:
+      - JVM_HEAP_OPTS=-Xms4G -Xmx4G -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:MaxDirectMemorySize=4G
+        # 设置 JVM 的内存参数：
+        # - 初始堆内存 4G，最大堆内存 4G
+        # - 元空间初始 256MB，最大 512MB
+        # - 最大直接内存 4G，用于零拷贝/Netty I/O 等
+
+    deploy:
+      resources:
+        limits:
+          memory: 10G                     # 容器最大可使用 10G 内存（compose v3 的 deploy 限制仅在 swarm 模式下生效）
+
+    ulimits:
+      nofile:
+        soft: 1048576                    # 单个进程最多可打开的文件数（软限制）
+        hard: 1048576                    # 单个进程最多可打开的文件数（硬限制）
+      nproc: 65535                       # 允许的最大进程数（防止资源耗尽）
+
+    sysctls:
+      net.core.somaxconn: 65535         # 系统级连接队列上限，提升连接性能
+      net.ipv4.tcp_max_syn_backlog: 8192 # 半连接队列长度，避免高并发丢包
+      net.ipv4.ip_local_port_range: "1024 65535" # 允许的本地端口范围
+      net.ipv4.tcp_tw_reuse: 1           # 允许重用 TIME-WAIT 状态连接
+      net.ipv4.tcp_fin_timeout: 15       # TCP 连接关闭后等待时间，默认是 60 秒，减少可回收端口时间
+```
+重新开启容器
+```bash
+docker compose down #退出并删除当前容器
+docker compose up -d #开启容器，并在后台
+```
 
 
 
